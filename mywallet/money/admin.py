@@ -1,5 +1,4 @@
 from django.contrib import admin
-from models import Mywallet
+from .models import Mywallet
 
-
-# Register your models here.
+admin.site.register(Mywallet)
