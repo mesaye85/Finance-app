@@ -1,10 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from os import datetime
 
 def index(request):
-
-    html =  <html> <head>
+    html = '''<html>
+  <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title></title>
@@ -42,7 +41,7 @@ def index(request):
       </div>
       <button type="button" class="btn btn-primary btn-lg">Login</button>
       <button type="button" class="btn btn-secondary btn-lg">
-        Sighn Up
+        Sign Up
       </button>
     </main>
 
@@ -71,7 +70,7 @@ def index(request):
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
           ["Task", "Hours per Day"],
-          ["Rent/Morgage", 11],
+          ["Rent/Mortgage", 11],
           ["Utilities", 2],
           ["Commute", 2],
           ["Entertainment", 2],
@@ -91,5 +90,6 @@ def index(request):
     </script>
     <script src="" async defer></script>
   </body>
-</html>
-    return  HttpResponse(html)
+</html>'''
+    return HttpResponse(html)
+
