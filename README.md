@@ -4,7 +4,7 @@ An unfinished Django personal-finance app: a landing page with a spending chart,
 
 ## Context
 
-I started this in late 2020 while teaching myself Django, before I knew its conventions for apps, routing and settings. It was meant to include a payment-system integration, which I never got working, partly because I wasn't managing package versions. I keep it public as a record of how I learned.
+I started this in late 2020 while teaching myself Django, before I knew its conventions for apps, routing and settings. It was meant to integrate Plaid, which I never got working, partly because I wasn't managing package versions. I keep it public as a record of how I learned.
 
 ## Stack
 
@@ -12,7 +12,7 @@ I started this in late 2020 while teaching myself Django, before I knew its conv
 - Django 3.1.3, Django REST framework 3.12.2, asgiref 3.3.1, pytz 2020.4, sqlparse 0.4.1
 - pylint 2.6.0 and its dependencies were also installed; they're editor tools, not runtime dependencies
 - SQLite; Google Charts loaded from a CDN
-- The page markup started as my `FinanceApp` repository
+- `mockup/` holds the static page I built first (see below)
 
 ## Running it
 
@@ -28,7 +28,7 @@ It does not start as committed (see Known gaps). Once the two missing imports in
 
 ## Status
 
-Not finished. The payment integration was never committed, so nothing in this repo calls an external service. With the two missing imports added, the home page renders; the Login, Sign Up and planning buttons go nowhere. The first commit is from February 2021; in February 2023 I fixed syntax errors in `views.py` and `admin.py` and added the home route through GitHub's web editor.
+Not finished. The Plaid integration was never committed, so nothing in this repo calls Plaid or any other external service. With the two missing imports added, the home page renders; the Login, Sign Up and planning buttons go nowhere. The first commit is from February 2021; in February 2023 I fixed syntax errors in `views.py` and `admin.py` and added the home route through GitHub's web editor.
 
 ## Known gaps
 
@@ -38,14 +38,20 @@ Not finished. The payment integration was never committed, so nothing in this re
 - `settings.py:24`: the secret key was hardcoded. It now comes from `DJANGO_SECRET_KEY`. The original key is still in git history; it was a development key.
 - `settings.py:27`: `DEBUG` was hardcoded to `True`. It now reads `DJANGO_DEBUG` and still defaults to `True`. `ALLOWED_HOSTS` (line 29) is empty, and there is no `STATIC_ROOT`.
 - `settings.py:36, 54, 127`: CORS is half set up. `corsheaders` is commented out, so `CORS_ORIGIN_ALLOW_ALL` does nothing. `CommonMiddleware` is listed twice (lines 49 and 55). `rest_framework` is installed (line 35), but nothing uses it.
-- Routing: there is no `money/urls.py`; the project `urls.py` imports the view directly, and only `/` and `/admin/` exist. The page links to `login.html` and loads `style.css`, but neither is routed or served, so both 404 and the page has no styling.
+- Routing: there is no `money/urls.py`; the project `urls.py` imports the view directly, and only `/` and `/admin/` exist. The page links to `login.html` and loads `style.css` (the stylesheet now in `mockup/`), but neither is routed or served, so both 404 and the page has no styling.
 - `money/views.py`: the page is a Python string returned with `HttpResponse`, not a template.
 - The model stores Social Security numbers as plain integers with no encryption. Integers would also drop leading zeros from SSNs and ZIP codes.
-- No requirements file was committed, and no payment or banking library is installed in `tutorial-env/`, so the integration's dependencies aren't recorded anywhere. The new `requirements.txt` is pinned from what is in `tutorial-env/`.
+- No requirements file was committed, and `plaid-python` isn't installed in `tutorial-env/`, so the Plaid integration's dependencies aren't recorded anywhere. The new `requirements.txt` is pinned from what is in `tutorial-env/`.
 - No tests (`money/tests.py` is empty). `tutorial-env/` and `__pycache__` were committed; they're untracked now but remain in history.
+
+## mockup/
+
+The static page I built in November 2020, before the Django project, as a separate repository (FinanceApp). I moved it here in 2026. Open `mockup/index.html` in a browser; the chart needs an internet connection to load Google Charts. It shows a nav bar with a search box, a donut chart of hardcoded sample spending, three buttons and a footer. None of the buttons, links or the search box do anything.
+
+Gaps in the mockup: every link is `#` or empty; the chart's header row still reads "Hours per Day" from the Google Charts example, and "Mortgage" is misspelled; the `<title>` is empty; an empty `<script src="">` loads nothing; the chart is a fixed 900x500 px, so it overflows on phones; the fixed footer can cover the buttons on short screens; the search input has no label and the chart has no text alternative.
 
 ## What I'd do differently now
 
 - Get the basic routes and models running end to end before adding an integration.
-- Pin dependencies in `requirements.txt` from the start and use the provider's sandbox.
+- Pin dependencies in `requirements.txt` from the start and build against Plaid's Sandbox environment first.
 - Not store SSNs at all unless required, and encrypt them if they are.
