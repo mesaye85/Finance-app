@@ -1,0 +1,20 @@
+# Virtual environments
+venv/
+env/
+.venv/
+tutorial-env/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Local configuration and data
+.env
+db.sqlite3
+db.sqlite3-journal
+*.log
+
+# OS and editor files
+.DS_Store
+.vscode/
+.idea/
